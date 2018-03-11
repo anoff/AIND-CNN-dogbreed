@@ -14,5 +14,5 @@ def extract_Resnet50(tensor):
 def dog_breed(img_path):
 	ResNet50_model = ResNet50(weights='imagenet')
 	features = extract_Resnet50(path_to_tensor(img_path))
-	prediction = Resnet50_model.predict(features)
+	prediction = ResNet50_model.predict(features)
 	return dog_names[np.argmax(prediction)]
