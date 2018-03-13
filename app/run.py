@@ -38,7 +38,7 @@ def init():
     start = time()
     print("initing..")
     # import weights into container
-    from keras.applications.resnet50 import ResNet50
+    from keras.applications.resnet50 import ResNet50 # pylint: disable=import-error
     ResNet50(weights='imagenet', include_top=False)
     print("init done in {}s".format(time() - start))
 
