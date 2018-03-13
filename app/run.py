@@ -37,6 +37,7 @@ def lol_you_look_like_a_dog(img_path):
 def init():
     start = time()
     print("initing..")
+    # import weights into container
     from keras.applications.resnet50 import ResNet50
     ResNet50(weights='imagenet', include_top=False)
     print("init done in {}s".format(time() - start))
