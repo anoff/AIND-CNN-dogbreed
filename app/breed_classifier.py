@@ -26,4 +26,5 @@ def dog_breed(img_path, limit_results = 10):
     print("predicting..")
     prediction = Resnet50_model.predict(features) # always sums to 1 as final layer outputs softmax
     # print(sorted(zip(prediction[0], dog_names), reverse=True)[:limit_results])
-    return sorted(zip(prediction[0], dog_names), reverse=True)[:limit_results]
+    sort = sorted(zip(prediction[0], dog_names), reverse=True)
+    return [(v, float(k)) for k,v in sort][:limit_results]

@@ -1,15 +1,39 @@
 import cv2
 from time import time
 from io import BytesIO
-from flask import Flask, send_file, render_template, jsonify
 from breed_classifier import dog_breed
 from species_detector import dog_detector, face_detector
 import matplotlib.pyplot as plt  
+import json
+import falcon
+
+class ApiResponse(object):
+
+    def on_get(self, req, resp):
+        breed = dog_breed("assets/anoff.jpg")
+        resp.body = json.dumps(breed)
+        resp.status = falcon.HTTP_200
+
+def get_app():
+    api = falcon.API()
+    api.add_route('/', ApiResponse())
+    api.add_route('/png', ImageResponse())
+    return api
+
+class ImageResponse(object):
+    def on_get(self, req, resp):
+        fig = lol_you_look_like_a_dog()
+        img = BytesIO()
+        fig.savefig(img)
+        img.seek(0)
+        resp.stream = img
+        resp.content_type = falcon.MEDIA_PNG
+        resp.status = falcon.HTTP_200
 
 # gimme images of stuff!
 def lol_you_look_like_a_dog(img_path = "assets/anoff.jpg"):
-    is_dog = True#dog_detector(img_path)
-    is_human = True#face_detector(img_path)
+    is_dog = dog_detector(img_path)
+    is_human = face_detector(img_path)
     breed = dog_breed(img_path)
     is_error = False
     message = ""
@@ -40,21 +64,3 @@ def warmup():
     from keras.applications.resnet50 import ResNet50 # pylint: disable=import-error
     ResNet50(weights='imagenet', include_top=False)
     print("init done in {}s".format(time() - start))
-
-app = Flask(__name__)
-
-@app.route('/')
-def hello_world():
-    return 'hello 🐶'
-
-@app.route('/api')
-def api():
-    #is_dog = dog_detector("assets/anoff.jpg")
-    #is_human = face_detector("assets/anoff.jpg")
-    #breed = dog_breed("assets/anoff.jpg", limit_results=float('inf'))
-    fig = lol_you_look_like_a_dog()
-    return "weeee"
-
-if __name__ == '__main__':
-    #warmup()
-    app.run(debug=True,host='0.0.0.0')

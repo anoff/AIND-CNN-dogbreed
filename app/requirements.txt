@@ -7,3 +7,5 @@ pillow==4.0.0
 ipykernel==4.6.1
 tensorflow==1.0.0
 flask
+gunicorn>=19.7.1
+falcon>=1.4.1
