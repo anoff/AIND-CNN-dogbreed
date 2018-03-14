@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 
 # gimme images of stuff!
 def lol_you_look_like_a_dog(img_path):
-    is_dog = True#dog_detector(img_path)
-    is_human = False#face_detector(img_path)
+    is_dog = dog_detector(img_path)
+    is_human = face_detector(img_path)
     breed = dog_breed(img_path)
     breed = "test"
     is_error = False

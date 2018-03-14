@@ -21,7 +21,9 @@ def extract_Resnet50(tensor):
 Resnet50_model = build_model()
 # return the dog breed from path to an image as input
 def dog_breed(img_path, limit_results = 10):
+    print("extracting..")
     features = extract_Resnet50(path_to_tensor(img_path))
+    print("predicting..")
     prediction = Resnet50_model.predict(features) # always sums to 1 as final layer outputs softmax
-    print(sorted(zip(prediction[0], dog_names), reverse=True)[:limit_results])
-    return dog_names[np.argmax(prediction)]
+    # print(sorted(zip(prediction[0], dog_names), reverse=True)[:limit_results])
+    return sorted(zip(prediction[0], dog_names), reverse=True)[:limit_results]

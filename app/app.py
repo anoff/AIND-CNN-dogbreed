@@ -1,16 +1,16 @@
 import cv2
+from time import time
 from io import BytesIO
-from flask import Flask, send_file, render_template
+from flask import Flask, send_file, render_template, jsonify
 from breed_classifier import dog_breed
 from species_detector import dog_detector, face_detector
 import matplotlib.pyplot as plt  
 
 # gimme images of stuff!
-def lol_you_look_like_a_dog(img_path):
-    is_dog = dog_detector(img_path)
-    is_human = face_detector(img_path)
-    #breed = dog_breed(img_path)
-    breed = "test"
+def lol_you_look_like_a_dog(img_path = "assets/anoff.jpg"):
+    is_dog = True#dog_detector(img_path)
+    is_human = True#face_detector(img_path)
+    breed = dog_breed(img_path)
     is_error = False
     message = ""
     if is_dog and is_human:
@@ -33,6 +33,13 @@ def lol_you_look_like_a_dog(img_path):
     plt.show()
     return figure
 
+def warmup():
+    start = time()
+    print("initing..")
+    # import weights into container
+    from keras.applications.resnet50 import ResNet50 # pylint: disable=import-error
+    ResNet50(weights='imagenet', include_top=False)
+    print("init done in {}s".format(time() - start))
 
 app = Flask(__name__)
 
@@ -40,17 +47,14 @@ app = Flask(__name__)
 def hello_world():
     return 'hello 🐶'
 
-@app.route('/image')
-def image():
-    return render_template("assets/image.html")
-
-@app.route('/png')
-def png():
-    fig = lol_you_look_like_a_dog("assets/anoff.jpg")
-    img = BytesIO()
-    fig.savefig(img)
-    img.seek(0)
-    return send_file(img, mimetype='image/png')
+@app.route('/api')
+def api():
+    #is_dog = dog_detector("assets/anoff.jpg")
+    #is_human = face_detector("assets/anoff.jpg")
+    #breed = dog_breed("assets/anoff.jpg", limit_results=float('inf'))
+    fig = lol_you_look_like_a_dog()
+    return "weeee"
 
 if __name__ == '__main__':
+    #warmup()
     app.run(debug=True,host='0.0.0.0')
