@@ -12,4 +12,4 @@ COPY . /app
 # get keras weights
 RUN [ "python", "./setup.py" ]
 
-CMD ["gunicorn", "--bind=0.0.0.0:5000", "--workers=2", "app:get_app()"]
+CMD ["gunicorn", "--bind=0.0.0.0:5000", "--workers=5", "--timeout=60", "app:get_app()"]

@@ -8,17 +8,10 @@ import json
 import falcon
 
 class ApiResponse(object):
-
     def on_get(self, req, resp):
         breed = dog_breed("assets/anoff.jpg")
         resp.body = json.dumps(breed)
         resp.status = falcon.HTTP_200
-
-def get_app():
-    api = falcon.API()
-    api.add_route('/', ApiResponse())
-    api.add_route('/png', ImageResponse())
-    return api
 
 class ImageResponse(object):
     def on_get(self, req, resp):
@@ -29,6 +22,18 @@ class ImageResponse(object):
         resp.stream = img
         resp.content_type = falcon.MEDIA_PNG
         resp.status = falcon.HTTP_200
+
+class HealthResponse(object):
+    def on_get(self, req, resp):
+        resp.body = "Hello 🐶 "
+        resp.status = falcon.HTTP_200
+
+def get_app():
+    api = falcon.API()
+    api.add_route('/', HealthResponse())
+    api.add_route('/api', ApiResponse())
+    api.add_route('/png', ImageResponse())
+    return api
 
 # gimme images of stuff!
 def lol_you_look_like_a_dog(img_path = "assets/anoff.jpg"):
