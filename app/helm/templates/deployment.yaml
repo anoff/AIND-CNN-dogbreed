@@ -1,0 +1,27 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  labels:
+    app: dogapp
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+  name: dogapp
+spec:
+  selector:
+    matchLabels:
+      app: dogapp
+  template:
+    metadata:
+      labels:
+        app: dogapp
+    spec:
+      imagePullSecrets:
+      - name: registrykey
+      containers:
+      - image: anoff.azurecr.io/dogapp:{{ .Values.app.version }}
+        imagePullPolicy: Always
+        name: dogapp
+        ports:
+        - containerPort: 5000
+      restartPolicy: Always
